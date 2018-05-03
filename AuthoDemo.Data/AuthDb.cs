@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data.SqlClient;
 
 namespace AuthDemo.Data
 {
-    public class User
-    {
-        public int Id { get; set; }
-        public string Email { get; set; }
-        public string Name { get; set; }
-        public string PasswordHash { get; set; }
-        public string PasswordSalt { get; set; }
-    }
-
     public class AuthDb
     {
         private readonly string _connectionString;
@@ -84,33 +69,6 @@ namespace AuthDemo.Data
             }
 
             return null;
-        }
-    }
-
-    public static class PasswordHelper
-    {
-        public static string GenerateSalt()
-        {
-            RNGCryptoServiceProvider provider = new RNGCryptoServiceProvider();
-            byte[] bytes = new byte[10];
-            provider.GetBytes(bytes);
-            return Convert.ToBase64String(bytes);
-        }
-
-        public static string HashPassword(string password, string salt)
-        {
-            SHA256Managed crypt = new SHA256Managed();
-            string combinedString = password + salt;
-            byte[] combined = Encoding.Unicode.GetBytes(combinedString);
-
-            byte[] hash = crypt.ComputeHash(combined);
-            return Convert.ToBase64String(hash);
-        }
-
-        public static bool PasswordMatch(string userInput, string salt, string passwordHash)
-        {
-            string userInputHash = HashPassword(userInput, salt);
-            return passwordHash == userInputHash;
         }
     }
 }
